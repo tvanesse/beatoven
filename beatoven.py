@@ -17,41 +17,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 from samples import Sample
 
-import pygame
-from pygame.locals import *
+from gi.repository import Gtk
+from gi.repository.Gdk import keyval_name
 
-pygame.init()
-window = pygame.display.set_mode((640, 480))
+def play_sample(widget, event, data=None):
+    s = Sample("samples/debiles.wav")
+    key_pressed = keyval_name(event.keyval)
+    if key_pressed == 'a':
+        s.play_resume()
 
+builder = Gtk.Builder()
+builder.add_from_file("gui/main.glade")
 
-if __name__ == "__main__":
-    import sys
-    import time
-    s1 = Sample(sys.argv[1])
-    s2 = Sample(sys.argv[2])
-    s3 = Sample(sys.argv[3])
-    
-    samples = (s1, s2, s3)
-    
-    running = True
+window1 = builder.get_object("window1")
+window1.connect("delete-event", Gtk.main_quit)
+window1.connect("key-press-event", play_sample)
 
-    while running:
-        time.sleep(0.01)
-        for s in samples:
-            if not s.is_active():
-                s.rewind()
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                running = False
-            elif event.type == KEYDOWN:
-                if event.key == K_KP0:
-                    s1.rewind()
-                    s1.play_resume()
-                elif event.key == K_KP_PERIOD:
-                    s2.rewind()
-                    s2.play_resume()
-                elif event.key == K_KP_ENTER:
-                    s3.rewind()
-                    s3.play_resume()
-                    
-            
+window1.show_all()
+Gtk.main()

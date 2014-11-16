@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import pyaudio
 import wave
 
-class Sample():
+class Sample:
     """
     A sample to be played in Beatoven.
     """
@@ -35,14 +35,6 @@ class Sample():
                                   
     def callback(self, in_data, frame_count, time_info, status):
         data = self.wf.readframes(frame_count)
-#        if self.wf.tell() == self.length:
-#            print("About to stop the stream")
-#        if not self.is_active():
-#            self.stream.stop_stream()
-#            print("Stream stopped")
-#            self.wf.rewind()
-#            print("Stream reloaded")
-#            return (data, pyaudio.paComplete)
         return (data, pyaudio.paContinue)
         
     def play_resume(self):
