@@ -20,18 +20,48 @@ from samples import Sample
 from gi.repository import Gtk
 from gi.repository.Gdk import keyval_name
 
-def play_sample(widget, event, data=None):
-    s = Sample("samples/debiles.wav")
-    key_pressed = keyval_name(event.keyval)
-    if key_pressed == 'a':
-        s.play_resume()
+class BeatKey:
+    """
+    A key with a Sample assigned to it.
+    """
+    def __init__(self, key_name, filename=None):
+        self.sample = Sample(filename)
+        self.key_name = key_name
+        self.key_button_id = "key_butt_" + self.key_name;
+        
+    def set_sample(filename):
+        self.sample = Sample(filename)
+        
+
+class Session:
+    """
+    A Beatoven session.
+    """
+    def __init__(self, keyboard_layout="belgian"):
+        # Create a set of BeatKeys to cover the keyboard
+        #TODO
+        pass
+
+def key_pressed_handler(widget, event, data=None):
+    key_pressed = keyval_name(event.keyval).lower()
+    for bk in beatkeys:
+        if bk.key_name == key_pressed:
+            # Highlight the corresponding button
+            # Play the sample
+            bk.sample.play_resume()
 
 builder = Gtk.Builder()
 builder.add_from_file("gui/main.glade")
 
 window1 = builder.get_object("window1")
 window1.connect("delete-event", Gtk.main_quit)
-window1.connect("key-press-event", play_sample)
+window1.connect("key-press-event", key_pressed_handler)
+
+sample_chooser = builder.get_object("sample_chooser")
+loaded = sample_chooser.run()
+
+if loaded == -3:
+    print(sample_chooser.get_filename() + " selected")
 
 window1.show_all()
 Gtk.main()
