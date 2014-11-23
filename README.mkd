@@ -1,0 +1,11 @@
+Beatoven
+========
+
+Dependencies
+------------
+* pyaudio
+* GTK+ 3
+
+Quickstart
+----------
+`python beatoven.py`
